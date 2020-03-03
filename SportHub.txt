@@ -1,0 +1,139 @@
+Create Database SportHub;
+
+Create Table auth_user(
+	id int Not Null Primary Key Auto_Increment,
+	password varchar(128),
+	last_login datetime(6),
+	is_superuser tinyint(1),
+	username varchar(150),
+	first_name varchar(30),
+	last_name varchar(150),
+	email varchar(254),
+	is_staff tinyint(1),
+	is_active tinyint(1),
+	date_joined datetime(6));
+
+////////////////////////////////////////////////////////////////////////////////
+
+Create Table Admin(
+	ID int Not Null Primary Key Auto_Increment,
+	UserID int,
+	BirthDate date,
+	FatherName varchar(50),
+	Gender boolean,
+	NationalCode char(10),
+	Foreign Key (UserID) References auth_user (id));
+
+Create Table ClubOwner(
+	ID int Not Null Primary Key Auto_Increment,
+	UserID int,
+	NationalCode char(10),
+	Foreign Key (UserID) References auth_user (id));
+
+Create Table Client(
+	ID int Not Null Primary Key Auto_Increment,
+	UserID int,	
+	TeamName varchar(50),
+	Age int,
+	Date datetime,
+	Foreign Key (UserID) References auth_user (id));
+
+////////////////////////////////////////////////////////////////////////////////
+
+Create Table Club(
+	ID int Not Null Primary Key Auto_Increment,
+	ClubOwnerID int,
+	AdminID_AcceptedBy int,
+	ClubName varchar(50),
+	ClubPhoneNumber char(11),
+	Address varchar(200),
+	Location varchar(50),
+	Scores int,
+	Parking boolean,
+	WC boolean,
+	Shower boolean,
+	AbSardKon boolean,
+	TahvieHava boolean,
+	RakhtKan boolean,
+	Boofe boolean,
+	Foreign Key (ClubOwnerID) References ClubOwner(ID),
+	Foreign Key (AdminID_AcceptedBy) References Admin(ID));
+
+Create Table ClubSans(
+	ID int Not Null Primary Key Auto_Increment,
+	ClubID int,
+	FromTime time,
+	TillTime time,
+	Capacity int,
+	Cost int,
+	Foreign Key (ClubID) References Club(ID));
+
+Create Table ClubPictures(
+	ID int Not Null Primary Key Auto_Increment,
+	ClubID int,
+	Picture varchar(255),
+	DateAdded datetime,
+	Foreign Key (ClubID) References Club (ID));
+
+Create Table ClubScore(
+	ID int Not Null Primary Key Auto_Increment,
+	ClubID int,
+	ClientID int,
+	Score int,
+	Foreign Key (ClubID) References Club (ID),
+	Foreign Key (ClientID) References Client (ID));
+
+Create Table Comments(
+	ID int Not Null Primary Key Auto_Increment,
+	ClubID int,
+	Text varchar(200),
+	UserID int,
+	CommentsID int,
+	Date datetime,
+	Scores int,
+	Foreign Key (ClubID) References Club (ID),
+	Foreign Key (UserID) References auth_user (id),
+	Foreign Key (CommentsID) References Comments (ID));
+
+////////////////////////////////////////////////////////////////////////////////
+
+Create Table Rent(
+	ID int Not Null Primary Key Auto_Increment,
+	ClientID int,
+	ClubSansID int,
+	TeamName varchar(50),
+	Number int,
+	Date datetime,
+	Foreign Key (ClientID) References Client (ID),
+	Foreign Key (ClubSansID) References ClubSans (ID));	
+	
+Create Table CommentScores(
+	ID int Not Null Primary Key Auto_Increment,
+	CommentsID int,
+	ClientID int,
+	Score boolean,
+	Foreign Key (CommentsID) References Comments (ID),
+	Foreign Key (ClientID) References Client (ID));
+
+////////////////////////////////////////////////////////////////////////////////
+
+Create Table Team(
+	ID int Not Null Primary Key Auto_Increment,
+	ClientID_TeamAdmin int,
+	TeamName varchar(50),
+	MemberCount int,
+	Foreign Key (ClientID_TeamAdmin) References Client (ID));
+
+Create Table TeamMember(
+	ID int Not Null Primary Key Auto_Increment,
+	TeamID int,
+	ClientID int,
+	DateAdded datetime,
+	Foreign Key (TeamID) References Team (ID),
+	Foreign Key (ClientID) References Client (ID));
+
+Create Table Player ...
+Create Table Match ...
+Create Table Competition ...
+	
+	
