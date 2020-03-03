@@ -2,10 +2,10 @@ from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
-from app.models import *
+from app.models import Club, Clubpictures
 
 
-class RegistrationSerializer(serializers.ModelSerializer):
+class SignupSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'password']

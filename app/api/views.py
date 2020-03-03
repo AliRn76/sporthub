@@ -2,19 +2,21 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
-from app.api.serializers import RegistrationSerializer, ShowAllClubSerializer, ShowClubPictures
-from rest_framework.permissions import IsAuthenticated
+from app.api.serializers import SignupSerializer, ShowAllClubSerializer, ShowClubPictures
 
-from app.models import *
+
+from app.models import Club, Clubpictures
 
 
 @api_view(['POST', ])
-def registration_view(request):
+@permission_classes((AllowAny,))
+def signup_view(request):
 
     if request.method == "POST":
-        serializer = RegistrationSerializer(data=request.data)
+        serializer = SignupSerializer(data=request.data)
         data = {}
         if serializer.is_valid():
             user = User.objects.create(username=serializer.data.get("username"), is_staff=True)
@@ -24,7 +26,7 @@ def registration_view(request):
 
             data["response"] = "successfully registered a new user"
             data['user'] = serializer.data.get("username")
-            data['pass'] = serializer.data.get("password")
+            # data['pass'] = serializer.data.get("password")
             token = Token.objects.get(user=user).key
             data['token'] = token
         else:
