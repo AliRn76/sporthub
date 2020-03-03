@@ -36,7 +36,7 @@ class Client(models.Model):
 class Club(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     clubownerid = models.ForeignKey('Clubowner', models.DO_NOTHING, db_column='ClubOwnerID', blank=True, null=True)
-    adminid_acceptedby = models.ForeignKey(Admin, models.DO_NOTHING, db_column='AdminID_AcceptedBy', blank=True, null=True)
+    adminid_accdeptedby = models.ForeignKey(Admin, models.DO_NOTHING, db_column='AdminID_AcceptedBy', blank=True, null=True)
     clubname = models.CharField(db_column='ClubName', max_length=50, blank=True, null=True)
     clubphonenumber = models.CharField(db_column='ClubPhoneNumber', max_length=11, blank=True, null=True)
     address = models.CharField(db_column='Address', max_length=200, blank=True, null=True)
