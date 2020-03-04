@@ -16,9 +16,16 @@ class ShowClubPicturesSerializer(serializers.ModelSerializer):
         fields = ['picture']
 
 class ShowAllClubSerializer(serializers.ModelSerializer):
+    # picture = serializers.SerializerMethodField('get_club_picture')
     class Meta:
         model = Club
-        fields = ['clubname', 'location', 'scores']
+        fields = ['clubname', 'location', 'scores'] # , 'picture'
+
+    # def get_club_picture(self, club):
+    #     picture = Clubpictures.objects.filter(clubid=club.id).last()
+    #     picture = picture.picture.url
+    #     print(picture)
+    #     return picture
 
 
 class ClubSerializer(serializers.ModelSerializer):

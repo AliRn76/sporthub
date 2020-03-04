@@ -71,6 +71,10 @@ def club_view(request):
     if request.method == 'GET':
         # be in function bayad {"clubname":"SOME NAME"} pas dade beshe
         club_name = request.data.get("clubname")
+        print(club_name)
+        if club_name is None:
+            return Response({"response": "error, unexpected request"}, status=status.HTTP_417_EXPECTATION_FAILED)
+
         try:
             club = Club.objects.get(clubname=club_name)
             if club:
@@ -97,7 +101,7 @@ def club_view(request):
                     for comment in comments_ser:
                         serializer.append(comment)
 
-        except:
+        except Club.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     return Response(serializer)
