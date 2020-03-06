@@ -95,18 +95,18 @@ def club_view(request):
                 club_ser = ClubSerializer(club).data
                 club_id = Club.objects.get(clubname=club_name).id
                 serializer.append(club_ser)
-                # Picture
-                pictures = Clubpictures.objects.filter(clubid=club_id)
-                if pictures:
-                    pictures_ser = ShowClubPicturesSerializer(pictures, many=True).data
-                    for picture in pictures_ser:
-                        serializer.append(picture)
-
-                else:
-                    # set default image directory , age aks nadasht
-                    pictures_ser = {"picture": "/media/images/default.png"}
-                    serializer.append(pictures_ser)
-                # End Picture
+                # # Picture
+                # pictures = Clubpictures.objects.filter(clubid=club_id)
+                # if pictures:
+                #     pictures_ser = ShowClubPicturesSerializer(pictures, many=True).data
+                #     for picture in pictures_ser:
+                #         serializer.append(picture)
+                #
+                # else:
+                #     # set default image directory , age aks nadasht
+                #     pictures_ser = {"picture": "/media/images/default.png"}
+                #     serializer.append(pictures_ser)
+                # # End Picture
 
                 comments = Comments.objects.filter(clubid=club_id)
                 if comments:

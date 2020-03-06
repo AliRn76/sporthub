@@ -31,11 +31,26 @@ class ShowAllClubSerializer(serializers.ModelSerializer):
         return picture
 
 
+
 class ClubSerializer(serializers.ModelSerializer):
+    pictures = serializers.SerializerMethodField('get_club_pictures')
     class Meta:
         model = Club
         fields = ['clubname', 'clubphonenumber', 'address', 'scores',
-                  'parking', 'wc', 'shower', 'absardkon', 'tahviehava', 'rakhtkan', 'boofe']
+                  'parking', 'wc', 'shower', 'absardkon', 'tahviehava', 'rakhtkan', 'boofe', 'pictures']
+
+    def get_club_pictures(self, obj):
+        pictures_obj = Clubpictures.objects.filter(clubid=obj.id)
+        if pictures_obj:
+            pictures = []
+            for pic in pictures_obj:
+                pictures.append(pic.picture.url)
+
+        else:
+            pictures = "/media/images/default.png"
+
+        return pictures
+
 
 
 class CommentUserSerializer(serializers.ModelSerializer):
