@@ -4,12 +4,21 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authtoken.models import Token
+from django.shortcuts import render
 from django.utils.datetime_safe import datetime
 from django.contrib.auth.models import User
+
 from app.api.serializers import SignupSerializer, ShowAllClubSerializer, ShowClubPicturesSerializer, ClubSerializer, \
     CommentsSerializer
 
 from app.models import Club, Clubpictures, Comments, Client
+
+
+
+
+def main_view(request):
+    return render(request, "main.html", {})
+
 
 
 @api_view(['POST', ])
@@ -19,14 +28,18 @@ def signup_view(request):
         serializer = SignupSerializer(data=request.data)
         data = {}
         if serializer.is_valid():
+            # Create User
             user = User.objects.create(username=serializer.data.get("username"), is_staff=True)
             user.set_password(serializer.data.get("password"))
             user.save()
 
-            client = Client.objects.create(userid=user, age=10)
+            # Create Client
+            # Age , TeamName = Null
+            client = Client.objects.create(userid=user)
             client.datecreated = datetime.now()
             client.save()
 
+            # Take Token And Make Response Data
             token = Token.objects.get(user=user).key
             data["response"]    = "successfully registered a new user and new client"
             data['user']        = serializer.data.get("username")
@@ -122,6 +135,7 @@ def forgot_password_view(request):
 
 
 
+# Show_all_club() ro bar asase Paginations Besazam
 
 # object.datetime     = datetime.now()   Baraye save time
 
