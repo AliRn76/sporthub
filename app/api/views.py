@@ -60,7 +60,7 @@ def signup_view(request):
 def show_all_clubs_view(request):
     if request.method == "GET":
         paginator = PageNumberPagination()
-        paginator.page_size = 1
+        paginator.page_size = 6
         clubs = Club.objects.all()
 
         if clubs:
