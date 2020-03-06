@@ -27,7 +27,7 @@ class Client(models.Model):
     userid = models.ForeignKey(User, models.DO_NOTHING, db_column='UserID', blank=True, null=True)
     teamname = models.CharField(db_column='TeamName', max_length=50, blank=True, null=True)
     age = models.IntegerField(db_column='Age', blank=True, null=True)
-    date = models.DateTimeField(db_column='Date', blank=True, null=True)
+    datecreated = models.DateTimeField(db_column='Date', blank=True, null=True)
 
     class Meta:
         db_table = 'Client'
@@ -41,14 +41,14 @@ class Club(models.Model):
     clubphonenumber = models.CharField(db_column='ClubPhoneNumber', max_length=11, blank=True, null=True)
     address = models.CharField(db_column='Address', max_length=200, blank=True, null=True)
     location = models.CharField(db_column='Location', max_length=50, blank=True, null=True)
-    scores = models.IntegerField(db_column='Scores', blank=True, null=True)
-    parking = models.IntegerField(db_column='Parking', blank=True, null=True)
-    wc = models.IntegerField(db_column='WC', blank=True, null=True)
-    shower = models.IntegerField(db_column='Shower', blank=True, null=True)
-    absardkon = models.IntegerField(db_column='AbSardKon', blank=True, null=True)
-    tahviehava = models.IntegerField(db_column='TahvieHava', blank=True, null=True)
-    rakhtkan = models.IntegerField(db_column='RakhtKan', blank=True, null=True)
-    boofe = models.IntegerField(db_column='Boofe', blank=True, null=True)
+    scores = models.BooleanField(db_column='Scores', blank=True, null=True)
+    parking = models.BooleanField(db_column='Parking', blank=True, null=True)
+    wc = models.BooleanField(db_column='WC', blank=True, null=True)
+    shower = models.BooleanField(db_column='Shower', blank=True, null=True)
+    absardkon = models.BooleanField(db_column='AbSardKon', blank=True, null=True)
+    tahviehava = models.BooleanField(db_column='TahvieHava', blank=True, null=True)
+    rakhtkan = models.BooleanField(db_column='RakhtKan', blank=True, null=True)
+    boofe = models.BooleanField(db_column='Boofe', blank=True, null=True)
 
     class Meta:
         db_table = 'Club'
@@ -65,8 +65,8 @@ class Clubowner(models.Model):
 
 class Clubpictures(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
-    clubid = models.ForeignKey(Club, models.DO_NOTHING, db_column='ClubID', blank=True, null=True)
-    picture = models.ImageField(db_column='Picture', upload_to='images/', max_length=255, blank=True, null=True)
+    clubid = models.ForeignKey(Club, models.DO_NOTHING, db_column='ClubID')
+    picture = models.ImageField(db_column='Picture', upload_to='images/', max_length=255)
     dateadded = models.DateTimeField(db_column='DateAdded', blank=True, null=True)
 
     class Meta:

@@ -3,12 +3,13 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
+from django.utils.datetime_safe import datetime
+from django.contrib.auth.models import User
 from app.api.serializers import SignupSerializer, ShowAllClubSerializer, ShowClubPicturesSerializer, ClubSerializer, \
     CommentsSerializer
 
-from app.models import Club, Clubpictures, Comments
+from app.models import Club, Clubpictures, Comments, Client
 
 
 @api_view(['POST', ])
@@ -21,11 +22,17 @@ def signup_view(request):
             user = User.objects.create(username=serializer.data.get("username"), is_staff=True)
             user.set_password(serializer.data.get("password"))
             user.save()
-            data["response"] = "successfully registered a new user"
-            data['user'] = serializer.data.get("username")
-            # data['pass'] = serializer.data.get("password")
+
+            client = Client.objects.create(userid=user, age=10)
+            client.datecreated = datetime.now()
+            client.save()
+
             token = Token.objects.get(user=user).key
-            data['token'] = token
+            data["response"]    = "successfully registered a new user and new client"
+            data['user']        = serializer.data.get("username")
+            data['date']        = client.datecreated
+            # data['pass']      = serializer.data.get("password")
+            data['token']       = token
 
         else:
             data = serializer.errors
@@ -116,7 +123,7 @@ def forgot_password_view(request):
 
 
 
-
+# object.datetime     = datetime.now()   Baraye save time
 
 # ye function ke harvaght kaC score dad , scores ro miangin bgire
 
