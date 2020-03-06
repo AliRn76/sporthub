@@ -32,12 +32,37 @@ class ShowAllClubSerializer(serializers.ModelSerializer):
 
 
 
+
+# class CommentUserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ['username']
+#
+
+
+class CommentsSerializer(serializers.ModelSerializer):
+    # userid = CommentUserSerializer()
+    username = serializers.SerializerMethodField('get_username')
+    class Meta:
+        model = Comments
+        fields = ['text', 'date', 'scores', 'username']
+
+    def get_username(self, obj):
+        username = obj.userid.username
+        return username
+
+
+
+
 class ClubSerializer(serializers.ModelSerializer):
     pictures = serializers.SerializerMethodField('get_club_pictures')
+    comments = serializers.SerializerMethodField('get_club_comments')
+
     class Meta:
         model = Club
         fields = ['clubname', 'clubphonenumber', 'address', 'scores',
-                  'parking', 'wc', 'shower', 'absardkon', 'tahviehava', 'rakhtkan', 'boofe', 'pictures']
+                  'parking', 'wc', 'shower', 'absardkon', 'tahviehava', 'rakhtkan', 'boofe',
+                  'pictures', 'comments']
 
     def get_club_pictures(self, obj):
         pictures_obj = Clubpictures.objects.filter(clubid=obj.id)
@@ -45,25 +70,22 @@ class ClubSerializer(serializers.ModelSerializer):
             pictures = []
             for pic in pictures_obj:
                 pictures.append(pic.picture.url)
-
         else:
             pictures = "/media/images/default.png"
-
         return pictures
 
 
+    def get_club_comments(self, obj):
+        comments_obj = Comments.objects.filter(clubid=obj.id)
+        if comments_obj:
+            comments = CommentsSerializer(comments_obj, many=True).data
+            print(comments)
+        else:
+            comments = None
 
-class CommentUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username']
+        return comments
 
 
-class CommentsSerializer(serializers.ModelSerializer):
-    userid = CommentUserSerializer()
-    class Meta:
-        model = Comments
-        fields = ['text', 'date', 'scores', 'userid']
 
 
 # class ForgotPasswordSerializer(serializers.ModelSerializer):

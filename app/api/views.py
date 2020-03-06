@@ -84,49 +84,29 @@ def club_view(request):
     if request.method == 'GET':
         # be in function bayad {"clubname":"SOME NAME"} pas dade beshe
         club_name = request.data.get("clubname")
-        print(club_name)
         if club_name is None:
             return Response({"response": "error, unexpected request"}, status=status.HTTP_417_EXPECTATION_FAILED)
 
         try:
             club = Club.objects.get(clubname=club_name)
             if club:
-                serializer = []
-                club_ser = ClubSerializer(club).data
-                club_id = Club.objects.get(clubname=club_name).id
-                serializer.append(club_ser)
-                # # Picture
-                # pictures = Clubpictures.objects.filter(clubid=club_id)
-                # if pictures:
-                #     pictures_ser = ShowClubPicturesSerializer(pictures, many=True).data
-                #     for picture in pictures_ser:
-                #         serializer.append(picture)
-                #
-                # else:
-                #     # set default image directory , age aks nadasht
-                #     pictures_ser = {"picture": "/media/images/default.png"}
-                #     serializer.append(pictures_ser)
-                # # End Picture
-
-                comments = Comments.objects.filter(clubid=club_id)
-                if comments:
-                    comments_ser = CommentsSerializer(comments, many=True).data
-                    for comment in comments_ser:
-                        serializer.append(comment)
+                serializer = ClubSerializer(club)
 
         except Club.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-    return Response(serializer)
+    return Response(serializer.data)
 
 
 @api_view(['POST', ])
 def forgot_password_view(request):
     if request.method == "POST":
         pass
+
+
+
+
 # Chon hanuz nmidonm ba email bashe ya phone number , pas felan nmizanm
-
-
 
 # Show_all_club() ro bar asase Paginations Besazam
 
