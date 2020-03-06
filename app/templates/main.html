@@ -4,7 +4,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}">
 </head>
 <body>
-    <h1>SportHub Documentation</h1>
+    <h1 style="text-align:center">SportHub Documentation</h1>
     <br>
 
     <h2><p><small>[POST]</small>   <ins>api/signup/</ins></p></h2>
@@ -47,23 +47,27 @@
         }
 
 <b>Receive:</b>
-        [
-            {
-                "clubname": "TNB CLUB",
-                "location": "Tehran",
-                "scores": true,
-                "picture": "/media/images/Screenshot_from_2020-02-23_02-44-59.png"
-            },
-            {
-                "clubname": "CyberPunk",
-                "location": null,
-                "scores": null,
-                "picture": "/media/images/Screenshot_from_2020-02-23_02-44-59.png"
-            },
-
-            ...
-
-        ]
+        <p>** Page Size ro rooye 6 set kardam, age count az 6 bishtar beshe tooye next o previous address baghiashono mizare ,
+         mesle in : "next":"http://127.0.0.1:8050/api/show-all-clubs/?page=2"<p>
+        {
+            "count": 2,
+            "next": null,
+            "previous": null,
+            "results": [
+                {
+                    "clubname": "TNB CLUB",
+                    "location": "Tehran",
+                    "scores": true,
+                    "picture": "/media/images/Screenshot_from_2020-01-04_22-42-03.png"
+                },
+                {
+                    "clubname": "CyberPunk",
+                    "location": null,
+                    "scores": null,
+                    "picture": "/media/images/default.png"
+                }
+            ]
+        }
     </pre>
 
     <hr>
@@ -74,44 +78,43 @@
             "Authorization":"Token fc2fbb08bc9123fg9ad7ff67fe0df75e719b2f16"
         }
 
+<b>Send In Body:</b>
+        {
+            "clubname":"TNB CLUB"
+        }
+
 <b>Receive:</b>
-        [
-            {
-                "clubname": "TNB CLUB",
-                "clubphonenumber": "22527984",
-                "address": "Majidie Shomali",
-                "scores": true,
-                "parking": true,
-                "wc": true,
-                "shower": true,
-                "absardkon": false,
-                "tahviehava": false,
-                "rakhtkan": false,
-                "boofe": false
-            },
-            {
-                "picture": "/media/images/Screenshot_from_2020-02-23_02-44-59.png"
-            },
-            {
-                "picture": "/media/images/Screenshot_from_2020-01-04_22-42-03.png"
-            },
-            {
-                "text": "salam be hame",
-                "date": "2020-03-03T17:59:25+03:30",
-                "scores": null,
-                "userid": {
+        {
+            "clubname": "TNB CLUB",
+            "clubphonenumber": "22527984",
+            "address": "Majidie Shomali",
+            "scores": true,
+            "parking": true,
+            "wc": true,
+            "shower": true,
+            "absardkon": false,
+            "tahviehava": false,
+            "rakhtkan": false,
+            "boofe": false,
+            "pictures": [
+                "/media/images/Screenshot_from_2020-02-23_02-44-59.png",
+                "/media/images/Screenshot_from_2020-01-04_22-42-03.png"
+            ],
+            "comments": [
+                {
+                    "text": "salam be hame",
+                    "date": "2020-03-03T17:59:25+03:30",
+                    "scores": null,
                     "username": "mr_vozhde"
-                }
-            },
-            {
-                "text": "salam be to mr vozhde",
-                "date": "2020-03-03T17:59:48+03:30",
-                "scores": null,
-                "userid": {
+                },
+                {
+                    "text": "salam be to mr vozhde",
+                    "date": "2020-03-03T17:59:48+03:30",
+                    "scores": null,
                     "username": "amin"
                 }
-            }
-        ]
+            ]
+        }
     </pre>
 
     <hr>

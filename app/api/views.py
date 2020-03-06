@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authtoken.models import Token
+from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import render
 from django.utils.datetime_safe import datetime
 from django.contrib.auth.models import User
@@ -58,26 +59,18 @@ def signup_view(request):
 @permission_classes((IsAuthenticated, ))
 def show_all_clubs_view(request):
     if request.method == "GET":
+        paginator = PageNumberPagination()
+        paginator.page_size = 1
         clubs = Club.objects.all()
+
         if clubs:
-            result = []
-            for club in clubs:
-                pictures = Clubpictures.objects.filter(clubid=club.id)
-                serializer1 = ShowAllClubSerializer(club)
-                serializer = serializer1.data
-                if pictures:
-                    serializer2 = ShowClubPicturesSerializer(pictures[0])
-                    picture_ser = serializer2.data
+            result_page = paginator.paginate_queryset(clubs, request)
+            serializer = ShowAllClubSerializer(result_page, many=True)
 
-                else:
-                    # set default image directory , age aks nadasht
-                    picture_ser = {"picture": "/media/images/Screenshot_from_2020-02-23_02-44-59.png"}
+            return paginator.get_paginated_response(serializer.data)
 
-                # image_dict ro be serializer add kard
-                serializer.update(picture_ser)
-                result.append(serializer)
-
-            return Response(result, status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -91,49 +84,29 @@ def club_view(request):
     if request.method == 'GET':
         # be in function bayad {"clubname":"SOME NAME"} pas dade beshe
         club_name = request.data.get("clubname")
-        print(club_name)
         if club_name is None:
             return Response({"response": "error, unexpected request"}, status=status.HTTP_417_EXPECTATION_FAILED)
 
         try:
             club = Club.objects.get(clubname=club_name)
             if club:
-                serializer = []
-                club_ser = ClubSerializer(club).data
-                club_id = Club.objects.get(clubname=club_name).id
-                serializer.append(club_ser)
-                # Picture
-                pictures = Clubpictures.objects.filter(clubid=club_id)
-                if pictures:
-                    pictures_ser = ShowClubPicturesSerializer(pictures, many=True).data
-                    for picture in pictures_ser:
-                        serializer.append(picture)
-
-                else:
-                    # set default image directory , age aks nadasht
-                    pictures_ser = {"picture": "/media/images/Screenshot_from_2020-02-23_02-44-59.png"}
-                    serializer.append(pictures_ser)
-                # End Picture
-
-                comments = Comments.objects.filter(clubid=club_id)
-                if comments:
-                    comments_ser = CommentsSerializer(comments, many=True).data
-                    for comment in comments_ser:
-                        serializer.append(comment)
+                serializer = ClubSerializer(club)
 
         except Club.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-    return Response(serializer)
+    return Response(serializer.data)
 
 
 @api_view(['POST', ])
 def forgot_password_view(request):
     if request.method == "POST":
         pass
+
+
+
+
 # Chon hanuz nmidonm ba email bashe ya phone number , pas felan nmizanm
-
-
 
 # Show_all_club() ro bar asase Paginations Besazam
 
