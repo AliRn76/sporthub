@@ -16,16 +16,19 @@ class ShowClubPicturesSerializer(serializers.ModelSerializer):
         fields = ['picture']
 
 class ShowAllClubSerializer(serializers.ModelSerializer):
-    # picture = serializers.SerializerMethodField('get_club_picture')
+    picture = serializers.SerializerMethodField('get_club_picture')
     class Meta:
         model = Club
-        fields = ['clubname', 'location', 'scores'] # , 'picture'
+        fields = ['clubname', 'location', 'scores', 'picture']
 
-    # def get_club_picture(self, club):
-    #     picture = Clubpictures.objects.filter(clubid=club.id).last()
-    #     picture = picture.picture.url
-    #     print(picture)
-    #     return picture
+    def get_club_picture(self, obj):
+        picture_obj = Clubpictures.objects.filter(clubid=obj.id).last()
+        if picture_obj:
+            picture = picture_obj.picture.url
+        else:
+            # set default image directory , age aks nadasht
+            picture = "/media/images/default.png"
+        return picture
 
 
 class ClubSerializer(serializers.ModelSerializer):
