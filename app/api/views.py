@@ -9,10 +9,10 @@ from django.shortcuts import render
 from django.utils.datetime_safe import datetime
 from django.contrib.auth.models import User
 
-from app.api.serializers import SignupSerializer, ShowAllClubSerializer, ShowClubPicturesSerializer, ClubSerializer, \
-    CommentsSerializer
+from app.api.serializers import SignupSerializer, ShowAllClubSerializer, ClubSerializer, \
+    ClubSansSerializer
 
-from app.models import Club, Clubpictures, Comments, Client
+from app.models import Club, Client, Clubsans
 
 
 
@@ -80,7 +80,7 @@ def show_all_clubs_view(request):
 
 @api_view(['GET', ])
 @permission_classes((IsAuthenticated, ))
-def club_view(request):
+def show_club_view(request):
     if request.method == 'GET':
         # be in function bayad {"clubname":"SOME NAME"} pas dade beshe
         club_name = request.data.get("clubname")
@@ -96,6 +96,39 @@ def club_view(request):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     return Response(serializer.data)
+
+
+
+@api_view(['GET', ])
+@permission_classes((IsAuthenticated, ))
+def show_club_sans(request):
+    if request.method == "GET":
+        # be in function bayad {"clubname":"SOME NAME"} pas dade beshe
+        club_name = request.data.get("clubname")
+
+        try:
+            club_id = Club.objects.get(clubname=club_name).id
+        except Club.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        sans = Clubsans.objects.filter(clubid=club_id)
+
+        if sans:
+            serializer = ClubSansSerializer(sans, many=True)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+    return Response(serializer.data)
+
+
+
+
+
+
+
+
+
+
 
 
 @api_view(['POST', ])

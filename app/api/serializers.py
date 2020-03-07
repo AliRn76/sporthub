@@ -2,18 +2,13 @@ from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
-from app.models import Club, Clubpictures, Comments
+from app.models import Club, Clubpictures, Comments, Clubsans
 
 
 class SignupSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'password']
-
-class ShowClubPicturesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Clubpictures
-        fields = ['picture']
 
 class ShowAllClubSerializer(serializers.ModelSerializer):
     picture = serializers.SerializerMethodField('get_club_picture')
@@ -31,6 +26,16 @@ class ShowAllClubSerializer(serializers.ModelSerializer):
         return picture
 
 
+
+class ClubSansSerializer(serializers.ModelSerializer):
+    club_name = serializers.SerializerMethodField("get_club_name")
+    class Meta:
+        model = Clubsans
+        fields = ['club_name', 'fromtime', 'tilltime', 'capacity', 'cost']
+
+    def get_club_name(self, obj):
+        clubname = obj.clubid.clubname
+        return clubname
 
 
 # class CommentUserSerializer(serializers.ModelSerializer):
