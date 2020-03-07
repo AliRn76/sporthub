@@ -93,7 +93,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'SportHub',
-        'USER': 'root',
+        'USER': 'Ali',
         'PASSWORD': 'alivampire2252',
     }
 }

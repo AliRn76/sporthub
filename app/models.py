@@ -41,7 +41,7 @@ class Club(models.Model):
     clubphonenumber = models.CharField(db_column='ClubPhoneNumber', max_length=11, blank=True, null=True)
     address = models.CharField(db_column='Address', max_length=200, blank=True, null=True)
     location = models.CharField(db_column='Location', max_length=50, blank=True, null=True)
-    scores = models.BooleanField(db_column='Scores', blank=True, null=True)
+    scores = models.IntegerField(db_column='Scores', blank=True, null=True)
     parking = models.BooleanField(db_column='Parking', blank=True, null=True)
     wc = models.BooleanField(db_column='WC', blank=True, null=True)
     shower = models.BooleanField(db_column='Shower', blank=True, null=True)
