@@ -117,15 +117,8 @@ def show_club_sans(request):
             serializer = ClubSansSerializer(sans, many=True)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+
     return Response(serializer.data)
-
-
-
-
-
-
-
 
 
 
