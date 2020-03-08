@@ -1,18 +1,28 @@
 
+from django.shortcuts import render
+from django.contrib.auth.models import User
+from django.utils.datetime_safe import datetime
+
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authtoken.models import Token
 from rest_framework.pagination import PageNumberPagination
-from django.shortcuts import render
-from django.utils.datetime_safe import datetime
-from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.decorators import api_view, permission_classes
 
-from app.api.serializers import SignupSerializer, ShowAllClubSerializer, ClubSerializer, \
+from app.api.serializers import (
+    SignupSerializer,
+    ShowAllClubSerializer,
+    ClubSerializer,
     ClubSansSerializer
+)
 
-from app.models import Club, Client, Clubsans
+from app.models import (
+    Club,
+    Client,
+    Clubsans,
+    Comments
+)
 
 
 
@@ -26,8 +36,11 @@ def main_view(request):
 @permission_classes((AllowAny,))
 def signup_view(request):
     if request.method == "POST":
-        serializer = SignupSerializer(data=request.data)
         data = {}
+
+        # Collecting Data
+        serializer = SignupSerializer(data=request.data)
+
         if serializer.is_valid():
             # Create User
             user = User.objects.create(username=serializer.data.get("username"), is_staff=True)
@@ -35,12 +48,12 @@ def signup_view(request):
             user.save()
 
             # Create Client
-            # Age , TeamName = Null
+            # Age & Teamname = Null
             client = Client.objects.create(userid=user)
             client.datecreated = datetime.now()
             client.save()
 
-            # Take Token And Make Response Data
+            # Take Token And Create data For Response
             token = Token.objects.get(user=user).key
             data["response"]    = "successfully registered a new user and new client"
             data['user']        = serializer.data.get("username")
@@ -59,10 +72,15 @@ def signup_view(request):
 @permission_classes((IsAuthenticated, ))
 def show_all_clubs_view(request):
     if request.method == "GET":
+
+        # Set Pagination
         paginator = PageNumberPagination()
         paginator.page_size = 6
+
+        # Take All clubs
         clubs = Club.objects.all()
 
+        # Serialize clubs If We Have
         if clubs:
             result_page = paginator.paginate_queryset(clubs, request)
             serializer = ShowAllClubSerializer(result_page, many=True)
@@ -82,20 +100,24 @@ def show_all_clubs_view(request):
 @permission_classes((IsAuthenticated, ))
 def show_club_view(request):
     if request.method == 'GET':
-        # be in function bayad {"clubname":"SOME NAME"} pas dade beshe
+        data = {}
+
+        # Collecting Data
         club_name = request.data.get("clubname")
-        if club_name is None:
-            return Response({"response": "error, unexpected request"}, status=status.HTTP_417_EXPECTATION_FAILED)
 
         try:
             club = Club.objects.get(clubname=club_name)
-            if club:
-                serializer = ClubSerializer(club)
 
         except Club.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            data['response']    = 'clubname is invalid'
+            return Response(data, status=status.HTTP_404_NOT_FOUND)
+
+        # Serialize club If We Have
+        if club:
+            serializer = ClubSerializer(club)
 
     return Response(serializer.data)
+
 
 
 
@@ -103,22 +125,75 @@ def show_club_view(request):
 @permission_classes((IsAuthenticated, ))
 def show_club_sans(request):
     if request.method == "GET":
-        # be in function bayad {"clubname":"SOME NAME"} pas dade beshe
+        data = {}
+        # Collecting Data
         club_name = request.data.get("clubname")
 
+        # Take club_id From club_name
         try:
             club_id = Club.objects.get(clubname=club_name).id
         except Club.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            data['response'] = "clubname is not valid"
+            return Response(data, status=status.HTTP_404_NOT_FOUND)
 
+        # Take sans From club_id
         sans = Clubsans.objects.filter(clubid=club_id)
 
+        # Serialize sans If We Have
         if sans:
             serializer = ClubSansSerializer(sans, many=True)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     return Response(serializer.data)
+
+
+
+
+
+@api_view(['POST', ])
+@permission_classes((IsAuthenticated, ))
+def send_comment_view(request):
+    if request.method == "POST":
+        data = {}
+
+        # Collecting Data
+        user = request.user
+        club_name = request.data.get("clubname")
+        text = request.data.get("text")
+
+        # Check Text And Make It Correct
+        text = " ".join(text.split())
+        temp_text = text.replace(' ', '')
+        if temp_text is None or temp_text == '':
+            data['response']    = "text is not valid"
+            return Response(data)
+
+        # Take club From club_name
+        try:
+            club = Club.objects.get(clubname=club_name)
+        except Club.DoesNotExist:
+            data['response']    = "clubname is not valid"
+            return Response(data, status=status.HTTP_404_NOT_FOUND)
+
+        # Create Comment Object
+        comment = Comments.objects.create(clubid=club, text=text, userid=user)
+        comment.date = datetime.now()
+        comment.save()
+
+        # Create data For Response
+        data['response']    = "successfully comment added"
+        data['username']    = request.user.username
+        data['clubname']    = club_name
+        data['text']        = text
+        data['date']        = comment.date
+
+
+        return Response(data)
+
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 
 

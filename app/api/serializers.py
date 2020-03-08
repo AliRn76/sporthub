@@ -1,14 +1,24 @@
+
 from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
-from app.models import Club, Clubpictures, Comments, Clubsans
+from app.models import (
+    Club,
+    Clubpictures,
+    Comments,
+    Clubsans
+)
+
+
 
 
 class SignupSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'password']
+
+
 
 class ShowAllClubSerializer(serializers.ModelSerializer):
     picture = serializers.SerializerMethodField('get_club_picture')
@@ -84,7 +94,7 @@ class ClubSerializer(serializers.ModelSerializer):
         comments_obj = Comments.objects.filter(clubid=obj.id)
         if comments_obj:
             comments = CommentsSerializer(comments_obj, many=True).data
-            print(comments)
+            # print(comments)
         else:
             comments = None
 

@@ -57,7 +57,7 @@ baghiashono mizare, mesle in : "next":"http://127.0.0.1:8050/api/show-all-clubs/
                 {
                     "clubname": "TNB CLUB",
                     "location": "Tehran",
-                    "scores": true,
+                    "scores": 4,
                     "picture": "/media/images/Screenshot_from_2020-01-04_22-42-03.png"
                 },
                 {
@@ -148,6 +148,32 @@ baghiashono mizare, mesle in : "next":"http://127.0.0.1:8050/api/show-all-clubs/
                 "cost": 200000
             }
         ]
+    </pre>
+
+    <hr>
+
+
+
+    <h2><p><small>[POST]</small>   <ins>api/send-comment/</ins></p></h2>
+    <pre><b>Send In Header:</b>
+        {
+            "Authorization":"Token fc2fbb08bc9123fg9ad7ff67fe0df75e719b2f16"
+        }
+
+<b>Send In Body:</b>
+        {
+            "clubname":"TNB CLUB"
+            "text":"Hello This is a test comment , hope you like it :)"
+        }
+
+<b>Receive:</b>
+        {
+            "response": "successfully comment added",
+            "username": "Ali",
+            "clubname": "TNB CLUB",
+            "text": "Hello This is a test comment , hope you like it :)",
+            "date": "2020-03-08T16:30:22.971526"
+        }
     </pre>
 
     <hr>
