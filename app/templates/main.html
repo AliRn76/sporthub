@@ -7,6 +7,8 @@
     <h1 style="text-align:center">SportHub Documentation</h1>
     <br>
 
+
+
     <h2><p><small>[POST]</small>   <ins>api/signup/</ins></p></h2>
     <pre><b>Send In Body:</b>
         {
@@ -25,6 +27,30 @@
 
     <hr>
 
+
+
+
+        <h2><p><small>[POST]</small>   <ins>api/check-username/</ins></p></h2>
+    <pre><b>Send In Body:</b>
+        {
+            "username":"USERNAME",
+        }
+
+<b>Receive:</b>
+        {
+            "response": "username is free"
+        }
+        OR
+        {
+            "response": "username is taken"
+        }
+    </pre>
+
+    <hr>
+
+
+
+
     <h2><p><small>[POST]</small>   <ins>api/login/</ins></p></h2>
     <pre><b>Send In Body:</b>
         {
@@ -34,11 +60,13 @@
 
 <b>Receive:</b>
         {
-        "token" : "e9d32ed80439408123asb897143051153e2915f5"
+            "token" : "e9d32ed80439408123asb897143051153e2915f5"
         }
     </pre>
 
     <hr>
+
+
 
     <h2><p><small>[GET]</small>   <ins>api/show-all-clubs/</ins></p></h2>
     <pre><b>Send In Header:</b>
@@ -48,7 +76,7 @@
 
 <b>Receive:</b>
         <p>** Page Size ro rooye 6 set kardam, age count az 6 bishtar beshe tooye next o previous address 
-baghiashono mizare, mesle in : "next":"http://127.0.0.1:8050/api/show-all-clubs/?page=2"<p>
+baghiashono mizare, mesle in : "next":"http://al1.best:88/api/show-all-clubs/?page=2"<p>
         {
             "count": 2,
             "next": null,

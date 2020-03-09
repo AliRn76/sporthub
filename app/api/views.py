@@ -200,6 +200,30 @@ def send_comment_view(request):
 
 
 @api_view(['POST', ])
+@permission_classes((AllowAny,))
+def check_username_view(request):
+    if request.method == "POST":
+        data = {}
+
+        # Collecting Data
+        username = request.data.get('username')
+
+        if username:
+            user = User.objects.filter(username=username)
+
+            if user:
+                data['response']    = 'username is taken'
+                return Response(data, status=status.HTTP_406_NOT_ACCEPTABLE)
+            else:
+                data['response'] = 'username is free'
+                return Response(data, status=status.HTTP_200_OK)
+
+        else:
+            data['response'] = 'username is not valid'
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST', ])
 def forgot_password_view(request):
     if request.method == "POST":
         pass
