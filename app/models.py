@@ -41,7 +41,7 @@ class Club(models.Model):
     clubphonenumber = models.CharField(db_column='ClubPhoneNumber', max_length=11, blank=True, null=True)
     address = models.CharField(db_column='Address', max_length=200, blank=True, null=True)
     location = models.CharField(db_column='Location', max_length=50, blank=True, null=True)
-    scores = models.IntegerField(db_column='Scores', blank=True, null=True)
+    scores = models.DecimalField(db_column='Scores', default=0.00, max_digits=3, decimal_places=2)
     parking = models.BooleanField(db_column='Parking', blank=True, null=True)
     wc = models.BooleanField(db_column='WC', blank=True, null=True)
     shower = models.BooleanField(db_column='Shower', blank=True, null=True)
@@ -67,7 +67,7 @@ class Clubpictures(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
     clubid = models.ForeignKey(Club, models.DO_NOTHING, db_column='ClubID')
     picture = models.ImageField(db_column='Picture', upload_to='images/', max_length=255)
-    dateadded = models.DateTimeField(db_column='DateAdded', blank=True, null=True)
+    dateadded = models.DateTimeField(db_column='DateAdded')
 
     class Meta:
         db_table = 'ClubPictures'
@@ -75,9 +75,9 @@ class Clubpictures(models.Model):
 
 class Clubsans(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
-    clubid = models.ForeignKey(Club, models.DO_NOTHING, db_column='ClubID', blank=True, null=True)
-    fromtime = models.TimeField(db_column='FromTime', blank=True, null=True)
-    tilltime = models.TimeField(db_column='TillTime', blank=True, null=True)
+    clubid = models.ForeignKey(Club, models.DO_NOTHING, db_column='ClubID')
+    fromtime = models.TimeField(db_column='FromTime')
+    tilltime = models.TimeField(db_column='TillTime')
     capacity = models.IntegerField(db_column='Capacity', blank=True, null=True)
     cost = models.IntegerField(db_column='Cost', blank=True, null=True)
 
@@ -87,9 +87,9 @@ class Clubsans(models.Model):
 
 class Clubscore(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True)
-    clubid = models.ForeignKey(Club, models.DO_NOTHING, db_column='ClubID', blank=True, null=True)
-    clientid = models.ForeignKey(Client, models.DO_NOTHING, db_column='ClientID', blank=True, null=True)
-    score = models.IntegerField(db_column='Score', blank=True, null=True)
+    clubid = models.ForeignKey(Club, models.DO_NOTHING, db_column='ClubID')
+    clientid = models.ForeignKey(Client, models.DO_NOTHING, db_column='ClientID')
+    score = models.IntegerField(db_column='Score')
 
     class Meta:
         db_table = 'ClubScore'

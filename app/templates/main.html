@@ -24,7 +24,6 @@
             "token": "e9d32ed80439408123asb897143051153e2915f5"
         }
     </pre>
-
     <hr>
 
 
@@ -33,7 +32,7 @@
         <h2><p><small>[POST]</small>   <ins>api/check-username/</ins></p></h2>
     <pre><b>Send In Body:</b>
         {
-            "username":"USERNAME",
+            "username":"USERNAME"
         }
 
 <b>Receive:</b>
@@ -63,8 +62,8 @@
             "token" : "e9d32ed80439408123asb897143051153e2915f5"
         }
     </pre>
-
     <hr>
+
 
 
 
@@ -97,8 +96,10 @@ baghiashono mizare, mesle in : "next":"http://al1.best:88/api/show-all-clubs/?pa
             ]
         }
     </pre>
-
     <hr>
+
+
+
 
     <h2><p><small>[GET]</small>   <ins>api/club/</ins></p></h2>
     <pre><b>Send In Header:</b>
@@ -144,7 +145,6 @@ baghiashono mizare, mesle in : "next":"http://al1.best:88/api/show-all-clubs/?pa
             ]
         }
     </pre>
-
     <hr>
 
 
@@ -177,7 +177,6 @@ baghiashono mizare, mesle in : "next":"http://al1.best:88/api/show-all-clubs/?pa
             }
         ]
     </pre>
-
     <hr>
 
 
@@ -203,7 +202,53 @@ baghiashono mizare, mesle in : "next":"http://al1.best:88/api/show-all-clubs/?pa
             "date": "2020-03-08T16:30:22.971526"
         }
     </pre>
+    <hr>
 
+
+
+
+    <h2><p><small>[PUT]</small>   <ins>api/set-club-score/</ins></p></h2>
+    <pre><b>Send In Header:</b>
+        {
+            "Authorization":"Token fc2fbb08bc9123fg9ad7ff67fe0df75e719b2f16"
+        }
+
+<b>Send In Body:</b>
+        {
+            "clubname":"TNB CLUB"
+            "score":"4"
+        }
+
+<b>Receive:</b>
+        {
+            "response": "score added"
+        }
+        OR
+        {
+            "response": "score updated"
+        }
+    </pre>
+    <hr>
+
+
+
+    <h2><p><small>[PUT]</small>   <ins>api/set-club-score/</ins></p></h2>
+    <pre><b>Send In Header:</b>
+        {
+            "Authorization":"Token fc2fbb08bc9123fg9ad7ff67fe0df75e719b2f16"
+        }
+
+<b>Send In Body:</b>
+        {
+            "clubname":"TNB CLUB"
+            "score":"4"
+        }
+
+<b>Receive:</b>
+        {
+            "response": "successfully club score updated"
+        }
+    </pre>
     <hr>
 </body>
 </html>

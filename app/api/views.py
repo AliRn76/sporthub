@@ -21,7 +21,8 @@ from app.models import (
     Club,
     Client,
     Clubsans,
-    Comments
+    Comments,
+    Clubscore,
 )
 
 
@@ -221,6 +222,73 @@ def check_username_view(request):
         else:
             data['response'] = 'username is not valid'
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+@api_view(['PUT', ])
+@permission_classes((IsAuthenticated, ))
+def set_club_score_view(request):
+    if request.method == "PUT":
+        data = {}
+
+        # Collecting Data
+        user        = request.user
+        score       = request.data.get('score')
+        club_name   = request.data.get('clubname')
+
+        # Check Number
+        try:
+            score = int(score)
+        except:
+            data['response'] = "score is not valid, should be number"
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+        if score > 5 or score < 0:
+            data['response'] = "score is not valid, should be 1-5"
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check Client
+        try:
+            client = Client.objects.get(userid=user)
+        except Client.DoesNotExist:
+            data['response']    = "client not found"
+            return Response(data, status=status.HTTP_404_NOT_FOUND)
+
+        # Check Club
+        try:
+            club = Club.objects.get(clubname=club_name)
+        except Club.DoesNotExist:
+            data['response'] = "clubname is not valid"
+            return Response(data, status=status.HTTP_404_NOT_FOUND)
+
+        # Update Score
+        try:
+            client_score = Clubscore.objects.get(clientid=client, clubid=club)
+            client_score.score = score
+            client_score.save()
+            print("successfully client score updated")
+
+        # Create Score
+        except Clubscore.DoesNotExist:
+            set_score = Clubscore.objects.create(clubid=club, clientid=client)
+            set_score.score = score
+            set_score.save()
+            print("successfully client score added")
+
+        # Update Club Score
+        club_scores = Clubscore.objects.filter(clubid=club)
+        sum_score = 0
+        for i in range(len(club_scores)):
+            sum_score = sum_score + club_scores[i].score
+        finall_score = sum_score / len(club_scores)
+
+        club.scores = finall_score
+        club.save()
+        data['response'] = "successfully club score updated"
+        return Response(data, status=status.HTTP_202_ACCEPTED)
+
+
 
 
 @api_view(['POST', ])
