@@ -213,10 +213,10 @@ def check_username_view(request):
             user = User.objects.filter(username=username)
 
             if user:
-                data['response']    = 'username is taken'
+                data['response']    = '0'
                 return Response(data, status=status.HTTP_406_NOT_ACCEPTABLE)
             else:
-                data['response'] = 'username is free'
+                data['response'] = '1'
                 return Response(data, status=status.HTTP_200_OK)
 
         else:
