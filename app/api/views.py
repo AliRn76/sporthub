@@ -289,6 +289,14 @@ def set_club_score_view(request):
         return Response(data, status=status.HTTP_202_ACCEPTED)
 
 
+@api_view(['GET', ])
+@permission_classes((AllowAny, ))
+def test_view(request):
+    data = {
+        'response': 'ok i got it',
+        'hello': "bye",
+    }
+    return Response(data,status=status.HTTP_201_CREATED)
 
 
 @api_view(['POST', ])
