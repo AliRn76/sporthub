@@ -12,7 +12,6 @@ from app.api.views import (
     check_username_view,
     set_club_score_view,
 
-    test_view
 )
 
 app_name = "api"
@@ -27,6 +26,5 @@ urlpatterns = [
     path('send-comment/', send_comment_view),
     path('check-username/', check_username_view),
     path('set-club-score/', set_club_score_view),
-    path('test/', test_view),
 
 ]
