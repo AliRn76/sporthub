@@ -3,6 +3,20 @@
 <head>
     <link rel="stylesheet" type="text/css" href="/static/main.css">
 </head>
+<style>
+    body{
+    max-width: 800px;
+    margin: auto;
+}
+
+pre{
+	background-color: #f5f5f5;
+	border: 1px solid #e5e5e5;
+	border-radius: 6px;
+	padding: 10px;
+}
+
+</style>
 <body>
     <h1 style="text-align:center">SportHub Documentation</h1>
     <br>
